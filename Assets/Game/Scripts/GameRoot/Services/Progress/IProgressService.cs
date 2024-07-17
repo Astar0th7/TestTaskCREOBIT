@@ -4,6 +4,6 @@ namespace Game.Scripts.Root.Services.Progress
 {
     public interface IProgressService
     {
-        ProgressData Data { get; }
+        ProgressData Data { get; set; }
     }
 }

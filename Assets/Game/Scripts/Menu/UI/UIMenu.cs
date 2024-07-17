@@ -1,22 +1,14 @@
-﻿using Game.Scripts.GameRoot.Services.SceneLoader;
-using Game.Scripts.GameRoot.Services.ServiceLocator;
-using Game.Scripts.Root;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Game.Scripts.Menu.UI
 {
     public class UIMenu : MonoBehaviour
     {
+        [SerializeField] private UIGameFirstPopup _gameFirstPopup;
+        [SerializeField] private UIGameSecondPopup _gameSecondPopup;
         [SerializeField] private Button _gameFirstButton;
         [SerializeField] private Button _gameSecondButton;
-        
-        private ISceneLoaderService _sceneLoaderService;
-
-        private void Start()
-        {
-            _sceneLoaderService = ServiceLocator.Instance.Resolve<ISceneLoaderService>();
-        }
 
         private void OnEnable()
         {
@@ -32,12 +24,12 @@ namespace Game.Scripts.Menu.UI
 
         private void OnGameFirstButtonClick()
         {
-            _sceneLoaderService.LoadScene(Scenes.GAME_FIRST);
+            _gameFirstPopup.Show();
         }
 
         private void OnGameSecondButtonClick()
         {
-            _sceneLoaderService.LoadScene(Scenes.GAME_SECOND);
+            _gameSecondPopup.Show();
         }
     }
 }

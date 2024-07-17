@@ -4,7 +4,7 @@ namespace Game.Scripts.Root.Services.Progress
 {
     public class ProgressService : IProgressService
     {
-        public ProgressData Data { get; }
+        public ProgressData Data { get; set; }
 
         public ProgressService()
         {

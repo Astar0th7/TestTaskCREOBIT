@@ -5,7 +5,9 @@ namespace Game.Scripts.Root.Services.Progress.Data
     [Serializable]
     public class GameFirstData
     {
-        public int CountClicks;
+        public int ClickCount;
+
+        public event Action<int> ClickCountValueChangeEvent; 
 
         public GameFirstData()
         {
@@ -14,7 +16,13 @@ namespace Game.Scripts.Root.Services.Progress.Data
 
         public void Reset()
         {
-            CountClicks = 0;
+            ClickCount = 0;
+        }
+
+        public void Click()
+        {
+            ClickCount++;
+            ClickCountValueChangeEvent?.Invoke(ClickCount);
         }
     }
 }

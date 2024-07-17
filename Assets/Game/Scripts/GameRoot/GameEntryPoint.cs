@@ -2,6 +2,7 @@
 using Game.Scripts.GameRoot.Services.SceneLoader;
 using Game.Scripts.GameRoot.Services.ServiceLocator;
 using Game.Scripts.Root.Services.Progress;
+using Game.Scripts.Root.Services.SaveLoad;
 using Game.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +28,9 @@ namespace Game.Scripts.Root
         private GameEntryPoint()
         {
             _sceneLoader = ServiceLocator.Instance.RegisterSingle<ISceneLoaderService>(new SceneLoaderService());
-            ServiceLocator.Instance.RegisterSingle<IProgressService>(new ProgressService());
+            IProgressService progressService = ServiceLocator.Instance.RegisterSingle<IProgressService>(new ProgressService());
+            ISaveLoadService saveLoadService = ServiceLocator.Instance.RegisterSingle<ISaveLoadService>(new DesktopSaveLoadService(progressService));
+            saveLoadService.Load();
         }
 
         private void RunGame()

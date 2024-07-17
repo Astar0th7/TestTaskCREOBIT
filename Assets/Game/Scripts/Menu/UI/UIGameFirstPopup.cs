@@ -3,16 +3,15 @@ using Game.Scripts.GameRoot.Services.ServiceLocator;
 using Game.Scripts.Root;
 using Game.Scripts.Root.Services.Progress;
 using Game.Scripts.Root.Services.SaveLoad;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Scripts.GameFirst.UI
+namespace Game.Scripts.Menu.UI
 {
-    public class HUD : MonoBehaviour
+    public class UIGameFirstPopup : MonoBehaviour, IPopup
     {
-        [SerializeField] private TMP_Text _scopeText;
-        [SerializeField] private Button _menuButton;
+        [SerializeField] private Button _loadButton;
+        [SerializeField] private Button _unloadButton;
 
         private ISaveLoadService _saveLoadService;
         private ISceneLoaderService _sceneLoaderService;
@@ -23,37 +22,45 @@ namespace Game.Scripts.GameFirst.UI
             _saveLoadService = ServiceLocator.Instance.Resolve<ISaveLoadService>();
             _sceneLoaderService = ServiceLocator.Instance.Resolve<ISceneLoaderService>();
             _progressService = ServiceLocator.Instance.Resolve<IProgressService>();
-            _progressService.Data.GameFirstData.ClickCountValueChangeEvent += OnClickCountValueChange;
-            OnClickCountValueChange(_progressService.Data.GameFirstData.ClickCount);
         }
 
         private void OnEnable()
         {
-            _menuButton.onClick.AddListener(OnMenuButtonClick);
+            _loadButton.onClick.AddListener(OnLoadButtonClick);
+            _unloadButton.onClick.AddListener(OnUnloadButtonClick);
         }
 
         private void OnDisable()
         {
-            _menuButton.onClick.RemoveListener(OnMenuButtonClick);
+            _loadButton.onClick.RemoveListener(OnLoadButtonClick);
+            _unloadButton.onClick.RemoveListener(OnUnloadButtonClick);
         }
 
-        private void OnDestroy()
+        public void Show()
         {
-            if (_progressService == null)
-                return;
-            
-            _progressService.Data.GameFirstData.ClickCountValueChangeEvent -= OnClickCountValueChange;
+            gameObject.SetActive(true);   
         }
 
-        private void OnMenuButtonClick()
+        public void Hide()
         {
+            gameObject.SetActive(false);   
+        }
+
+        private void OnLoadButtonClick()
+        {
+            LoadGame();
+        }
+
+        private void OnUnloadButtonClick()
+        {
+            _progressService.Data.GameFirstData.Reset();
             _saveLoadService.Save();
-            _sceneLoaderService.LoadScene(Scenes.MENU);
+            LoadGame();
         }
 
-        private void OnClickCountValueChange(int amount)
+        private void LoadGame()
         {
-            _scopeText.text = amount.ToString();
+            _sceneLoaderService.LoadScene(Scenes.GAME_FIRST);
         }
     }
 }
